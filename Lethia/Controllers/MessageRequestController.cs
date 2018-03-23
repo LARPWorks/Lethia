@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Lethia.Models;
 using System.Linq;
-using System.Collections.Generic;
 
 namespace Lethia.Controllers
 {

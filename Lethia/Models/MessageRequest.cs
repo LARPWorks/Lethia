@@ -1,10 +1,16 @@
 ﻿namespace Lethia.Models
 {
-    public enum MessageRequestType
+    public enum MessageRequestDataType
     {
         None,
         All,
         Character
+    }
+
+    public enum MessageRequestType
+    {
+        Read,
+        Edit
     }
 
     public class MessageRequest
@@ -14,5 +20,6 @@
         public bool IsComplete { get; set; }
         public string MessageBody { get; set; }
         public MessageRequestType MessageRequestType { get; set; }
+        public MessageRequestDataType MessageRequestDataType { get; set; }
     }
 }

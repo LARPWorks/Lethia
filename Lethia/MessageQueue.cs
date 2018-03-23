@@ -16,8 +16,10 @@ namespace Lethia
         public MessageQueue() {
             UnhandledEditMessages = new ConcurrentQueue<MessageRequest>();
             UnhandledReadMessages = new ConcurrentQueue<MessageRequest>();
-            ActiveMessageHandlers = new List<AngelMessageHandler>();
-            ActiveMessageHandlers.Add(new AssignToHumanAngel());
+            ActiveMessageHandlers = new List<AngelMessageHandler>
+            {
+                new AssignToHumanAngel()
+            };
         }
 
         public void AddNewReadMessageRequest(MessageRequest messageRequest) {
@@ -34,7 +36,7 @@ namespace Lethia
             {
                 if (UnhandledReadMessages.TryDequeue(out MessageRequest message))
                 {
-                    var RelevantMessageHandlers = ActiveMessageHandlers.Where(messageHandler => messageHandler.GetHandledMessageRequestTypes().Contains(message.MessageRequestType));
+                    var RelevantMessageHandlers = ActiveMessageHandlers.Where(messageHandler => (messageHandler.HandledMessageRequestType == MessageRequestType.Read) && messageHandler.GetHandledMessageRequestTypes().Contains(message.MessageRequestDataType));
                     var HighestPriorityMessageHandler = RelevantMessageHandlers.OrderByDescending(messageHandler => messageHandler.PriorityScore).First();
 
                     HighestPriorityMessageHandler.ProcessMessageRequest(message);
@@ -48,7 +50,7 @@ namespace Lethia
             {
                 if (UnhandledEditMessages.TryDequeue(out MessageRequest message))
                 {
-                    var RelevantMessageHandlers = ActiveMessageHandlers.Where(messageHandler => messageHandler.GetHandledMessageRequestTypes().Contains(message.MessageRequestType));
+                    var RelevantMessageHandlers = ActiveMessageHandlers.Where(messageHandler => (messageHandler.HandledMessageRequestType == MessageRequestType.Edit) && messageHandler.GetHandledMessageRequestTypes().Contains(message.MessageRequestDataType));
                     var HighestPriorityMessageHandler = RelevantMessageHandlers.OrderByDescending(messageHandler => messageHandler.PriorityScore).First();
 
                     HighestPriorityMessageHandler.ProcessMessageRequest(message);
